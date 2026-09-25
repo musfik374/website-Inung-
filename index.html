@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Online inung</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ==========================================
+           1. CUSTOM VARIABLE (Ubah Warna di Sini)
+           ========================================== */
+        :root {
+            --primary-color: #4F46E5;    /* Warna Utama (Indigox) */
+            --primary-hover: #4338CA;    /* Warna Utama saat di-hover */
+            --accent-color: #10B981;     /* Warna Hijau (Tombol Beli/WA) */
+            --bg-color: #F9FAFB;         /* Warna Latar Belakang */
+            --card-bg: #FFFFFF;         /* Warna Kartu Produk */
+            --text-color: #1F2937;       /* Warna Teks Utama */
+            --text-muted: #6B7280;      /* Warna Teks Sekunder */
+            --border-radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* ==========================================
+           2. BASE STYLES
+           ========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 60px;
+        }
+
+        /* ==========================================
+           3. HEADER & NAVBAR
+           ========================================== */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-icon-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #EF4444;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ==========================================
+           4. HERO & CONTROLS (SEARCH & FILTER)
+           ========================================== */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .controls {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .category-buttons {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .btn-filter {
+            background-color: #E5E7EB;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .btn-filter.active, .btn-filter:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* ==========================================
+           5. PRODUCT GRID & CARD
+           ========================================== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-top: auto;
+            margin-bottom: 1rem;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-add-cart:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* ==========================================
+           6. CART MODAL & SIDEBAR
+           ========================================== */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background-color: var(--card-bg);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-modal.open {
+            right: 0;
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .cart-overlay.open {
+            display: block;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .cart-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            align-items: center;
+        }
+
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .cart-item-price {
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .qty-btn {
+            background: #E5E7EB;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.85rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-checkout:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="navbar">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-store"></i> Toko inung
+            </a>
+            <button class="cart-icon-btn" id="cartBtn">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <!-- SEARCH & FILTER -->
+        <div class="controls">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="produknya inung...">
+            </div>
+            <div class="category-buttons" id="categoryContainer">
+                <!-- Filter Kategori di-generate lewat JS -->
+            </div>
+        </div>
+
+        <!-- PRODUCT LIST -->
+        <div class="product-grid" id="productGrid">
+            <!-- Produk akan ditampilkan di sini via JS -->
+        </div>
+    </div>
+
+    <!-- CART MODAL & OVERLAY -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>Keranjang Belanja</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-body" id="cartItems">
+            <!-- Item keranjang di-generate lewat JS -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">Rp 0</span>
+            </div>
+            <button class="btn-checkout" id="checkoutBtn">
+                <i class="fa-brands fa-whatsapp"></i> Beli via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        /* ==========================================
+           1. CUSTOM DATA & CONFIG (Ubah di Sini)
+           ========================================== */
+        
+        // Nomor WhatsApp Anda (Ganti dengan nomor aktif, sertakan kode negara. Contoh: 628123456789)
+        const WHATSAPP_NUMBER = "628123456789"; 
+
+        // Data Produk (Bisa ditambah / diubah sesuai kebutuhan)
+        const products = [
+            {
+                id: 1,
+                name: "Sepatu Sneakers Casual",
+                category: "sepatu",
+                price: 250000,
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+            },
+            {
+                id: 2,
+                name: "Kaos Polos Cotton Combed",
+                category: "pakaian",
+                price: 65000,
+                image: "https://github.com/musfik374/Musik/raw/main/0a0ef89f-10b7-4cb5-bff2-67cf3abb6bf9.jpg.webp"
+            },
+            {
+                id: 3,
+                name: "Jam Tangan Elegan",
+                category: "aksesoris",
+                price: 450000,
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"
+            },
+            {
+                id: 4,
+                name: "Jaket Denim Classic",
+                category: "pakaian",
+                price: 180000,
+                image: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500"
+            },
+            {
+                id: 5,
+                name: "Tas Ransel Laptop",
+                category: "aksesoris",
+                price: 130000,
+                image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500"
+            },
+            {
+                id: 6,
+                name: "Sepatu Lari Sport",
+                category: "sepatu",
+                price: 320000,
+                image: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=500"
+            }
+        ];
+
+        /* ==========================================
+           2. STATE MANAGEMENT
+           ========================================== */
+        let cart = [];
+        let selectedCategory = 'all';
+
+        // DOM Elements
+        const productGrid = document.getElementById('productGrid');
+        const categoryContainer = document.getElementById('categoryContainer');
+        const searchInput = document.getElementById('searchInput');
+        const cartBtn = document.getElementById('cartBtn');
+        const closeCart = document.getElementById('closeCart');
+        const cartModal = document.getElementById('cartModal');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartCount = document.getElementById('cartCount');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        /* ==========================================
+           3. FUNCTIONS
+           ========================================== */
+        
+        // Format Rupiah
+        const formatRupiah = (number) => {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+        };
+
+        // Render Kategori
+        function renderCategories() {
+            const categories = ['all', ...new Set(products.map(p => p.category))];
+            categoryContainer.innerHTML = categories.map(cat => `
+                <button class="btn-filter ${cat === selectedCategory ? 'active' : ''}" onclick="filterCategory('${cat}')">
+                    ${cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </button>
+            `).join('');
+        }
+
+        // Filter Berdasarkan Kategori
+        window.filterCategory = (cat) => {
+            selectedCategory = cat;
+            renderCategories();
+            renderProducts();
+        };
+
+        // Render Produk ke Layar
+        function renderProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            const filtered = products.filter(product => {
+                const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                productGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">Produk tidak ditemukan.</p>`;
+                return;
+            }
+
+            productGrid.innerHTML = filtered.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-img">
+                    <div class="product-info">
+                        <span class="product-category">${product.category}</span>
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">${formatRupiah(product.price)}</div>
+                        <button class="btn-add-cart" onclick="addToCart(${product.id})">
+                            <i class="fa-solid fa-cart-plus"></i> + Keranjang
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Tambah ke Keranjang
+        window.addToCart = (productId) => {
+            const product = products.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.id === productId);
+
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            openCartModal();
+        };
+
+        // Ubah Kuantitas di Keranjang
+        window.updateQuantity = (productId, change) => {
+            const cartItem = cart.find(item => item.id === productId);
+            if (cartItem) {
+                cartItem.quantity += change;
+                if (cartItem.quantity <= 0) {
+                    cart = cart.filter(item => item.id !== productId);
+                }
+            }
+            updateCartUI();
+        };
+
+        // Update Tampilan Keranjang & Counter
+        function updateCartUI() {
+            // Counter Badge
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalCount;
+
+            // Render Item Keranjang
+            if (cart.length === 0) {
+                cartItems.innerHTML = `<p style="text-align: center; color: var(--text-muted); margin-top: 2rem;">Keranjang Anda masih kosong.</p>`;
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${item.name}</div>
+                            <div class="cart-item-price">${formatRupiah(item.price)}</div>
+                            <div class="cart-item-qty">
+                                <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Total Harga
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity)
